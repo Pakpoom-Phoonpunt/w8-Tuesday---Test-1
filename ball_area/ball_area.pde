@@ -26,10 +26,10 @@ void setup() {
 
 void draw() {
   background(255);
-  for (Block block : blocks) { 
+  /*for (Block block : blocks) { 
     //block.random_color = color(random(0, 255), random(0, 255), random(0, 255));
     block.create_block();
-  }
+  }*/
   for (Ball ball : balls) { 
     //ball.random_color = color(random(0, 255), random(0, 255), random(0, 255));
     ball.create_ball();
@@ -108,21 +108,35 @@ class Block {
 void mouseClicked() {
   Ball[] balllist_left;
   Ball[] balllist_right;
+  Ball[] temp = new Ball[5] ;
+  Ball[] tempmid;
+  Ball[] temp_left;
+  Ball[] temp_right;
   Block[] boxlist_left;
   Block[] boxlist_right;
   check_ball = true;
-
+  
   for (int i = balls.length-1; i >= 0; i = i - 1) { // find the ball where clicked and delete it 
     float dis = dist(mouseX, mouseY, balls[i].positionX, balls[i].positionY);
     if (dis < balls[i].size/2 && balls[i].fashing == 0) {
       sum -= balls[i].getArea();
       println("this ball area is",balls[i].getArea());
       println("New sum of area is", sum);
+      temp[i] = new Ball (balls[i].positionX,balls[i].positionY,balls[i].size);
       balllist_left = (Ball[])subset (balls, 0, i);
       balllist_right = (Ball[])subset (balls, i+1 );
       balls = (Ball[])concat(balllist_left, balllist_right);
       check_ball = false;
       break;
+    }else{
+      for (int k = temp.length-1; k >= 0; k -=1){
+        tempmid = (Ball[])subset (temp, k, 1);
+        
+        balls = (Ball[])concat(balls,tempmid);
+        temp_left = (Ball[])subset (temp, 0, i);
+        temp_right = (Ball[])subset (temp, i+1 );
+        break;
+      }
     }
   }
 
